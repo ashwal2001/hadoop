@@ -1,0 +1,64 @@
+10
+
+dir
+8
+http://172.19.3.61/svn/recoengine/trunk/src/main/java/com/xyz/reccommendation
+http://172.19.3.61/svn/recoengine
+
+
+
+2013-05-01T10:02:31.181030Z
+8
+ashok
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+a12f15e6-f9fc-4506-9bde-49a01817f855
+
+mongo
+dir
+
+join
+dir
+
+partitioner
+dir
+
+mapper
+dir
+
+jaccard
+dir
+
+comparator
+dir
+
+key
+dir
+
+reducer
+dir
+
+grouping
+dir
+
+purchase
+dir
+
+driver
+dir
+
+util
+dir
+

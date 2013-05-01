@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/recoengine/!svn/ver/6/trunk/src/main/java/com/xyz/reccommendation/jaccard
+END
+JaccardMRStage4.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/recoengine/!svn/ver/9/trunk/src/main/java/com/xyz/reccommendation/jaccard/JaccardMRStage4.java
+END
+MRStage1.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/recoengine/!svn/ver/9/trunk/src/main/java/com/xyz/reccommendation/jaccard/MRStage1.java
+END
+MRStage2.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/recoengine/!svn/ver/6/trunk/src/main/java/com/xyz/reccommendation/jaccard/MRStage2.java
+END
+MRStage3.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/recoengine/!svn/ver/6/trunk/src/main/java/com/xyz/reccommendation/jaccard/MRStage3.java
+END
+CosineMRStage4.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/recoengine/!svn/ver/9/trunk/src/main/java/com/xyz/reccommendation/jaccard/CosineMRStage4.java
+END

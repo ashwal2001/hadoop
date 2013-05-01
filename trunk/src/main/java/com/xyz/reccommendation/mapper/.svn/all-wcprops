@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/recoengine/!svn/ver/8/trunk/src/main/java/com/xyz/reccommendation/mapper
+END
+XYtoYXMap.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/recoengine/!svn/ver/5/trunk/src/main/java/com/xyz/reccommendation/mapper/XYtoYXMap.java
+END
+RecoEngineMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/recoengine/!svn/ver/9/trunk/src/main/java/com/xyz/reccommendation/mapper/RecoEngineMapper.java
+END
+XYIdentityMap.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/recoengine/!svn/ver/5/trunk/src/main/java/com/xyz/reccommendation/mapper/XYIdentityMap.java
+END
+SalesMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/recoengine/!svn/ver/10/trunk/src/main/java/com/xyz/reccommendation/mapper/SalesMapper.java
+END
+PairCollectMap.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/recoengine/!svn/ver/5/trunk/src/main/java/com/xyz/reccommendation/mapper/PairCollectMap.java
+END
+TokenizerMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/recoengine/!svn/ver/9/trunk/src/main/java/com/xyz/reccommendation/mapper/TokenizerMapper.java
+END
