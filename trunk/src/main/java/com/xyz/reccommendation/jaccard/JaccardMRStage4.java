@@ -13,6 +13,7 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.KeyValueTextInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 import org.bson.BasicBSONObject;
@@ -30,7 +31,7 @@ public class JaccardMRStage4 {
 	 * Map to collect pairs
 	 */
 	public static class JaccardMap extends
-			Mapper<LongWritable, Text, TextDoublePair, Text> {
+			Mapper<Text, Text, TextDoublePair, Text> {
 		/**
 		 * @param ikey
 		 *            Dummy parameter required by Hadoop for the map operation,
@@ -45,12 +46,15 @@ public class JaccardMRStage4 {
 		 * @param reporter
 		 *            Used by Hadoop, but we do not use it
 		 */
-		public void map(LongWritable ikey, Text ival, Context context)
+		public void map(Text ikey, Text ival, Context context)
 				throws IOException, InterruptedException {
-			String[] token = ival.toString().split("\\,+");
+			String[] tokenVal = ival.toString().split("\\,+");
+			String[] tokenKey = ikey.toString().split("\\|+");
 			TextDoublePair okey = new TextDoublePair();
-			okey.set(token[3], Double.parseDouble(token[1]));
-			context.write(okey, ival);
+			okey.set(tokenKey[0], Double.parseDouble(tokenVal[0]));
+			Text value = new Text(ikey);
+			log.debug(okey+" "+value);
+			context.write(okey, value);
 		}
 	}
 
@@ -73,19 +77,19 @@ public class JaccardMRStage4 {
 		 * @param reporter
 		 *            Used by Hadoop, but we do not use it
 		 */
-		public void reduce(Text ikey, Iterable<Text> vlist, Context context)
+		public void reduce(TextDoublePair ikey, Iterable<Text> vlist, Context context)
 				throws IOException, InterruptedException {
 			int count = 0;
 			while (vlist.iterator().hasNext() && count < 20) {
 				Text val = vlist.iterator().next();
-				String[] token = val.toString().split("\\,+");
+				String[] token = val.toString().split("\\|+");
 
 				BasicBSONObject outputObj = new BasicBSONObject();
-				outputObj.put("countJaccard", token[1]);
-				outputObj.put("p1", token[3]);
-				outputObj.put("p2", token[4]);
-				Text id = new Text(token[0].trim());
-
+				outputObj.put("countJaccard", ikey.getSecond().get());
+				outputObj.put("p1", ikey.getFirst().toString());
+				outputObj.put("p2", token[1]);
+				Text id = new Text(val.toString().trim());
+				log.debug(id+" "+ikey.getSecond().get()+" "+ikey.getFirst().toString()+" "+token[1]);
 				context.write(id, new BSONWritable(outputObj));// 7294, 50000,
 																// jul 2013
 				count++;
@@ -109,7 +113,7 @@ public class JaccardMRStage4 {
 		} else {
 			envt = "dev";
 		}
-
+		log.debug("Envt: " + envt);
 		Properties prop = new Properties();
 
 		try {
@@ -149,7 +153,7 @@ public class JaccardMRStage4 {
 		job.setGroupingComparatorClass(CompositeKeyGroupingComparator.class);
 		job.setSortComparatorClass(CompositeKeyComparator.class);
 
-		job.setInputFormatClass(TextInputFormat.class);
+		job.setInputFormatClass(KeyValueTextInputFormat.class);
 		job.setOutputFormatClass(MongoOutputFormat.class);
 
 		// HDFS input and output directory

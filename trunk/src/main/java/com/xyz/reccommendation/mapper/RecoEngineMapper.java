@@ -30,7 +30,7 @@ public class RecoEngineMapper extends
 
 			valueSku.set(value.get("sku").toString());
 			log.debug(value.get("sessionId").toString() + " : "
-					+ value.get("sku"));
+					+ value.get("sku") + " : " + value.get("time"));
 			context.write(compositeKey, valueSku);
 		}
 

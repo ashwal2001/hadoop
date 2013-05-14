@@ -52,7 +52,7 @@ public class PairCollectMap extends Mapper<LongWritable, Text, Text, Text> {
 			String str = al.get(0).getCount() + "|" + al.get(i).getCount();
 			Text val = new Text();
 			val.set(str);
-			// System.out.println(t + "###" + str);
+			//System.out.println(t + "###" + str);
 			context.write(t, val);
 		}
 	}

@@ -25,20 +25,23 @@ public class SalesMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
 		String weight = conf.get("sku2sku.count.weight");
 
 		String[] array = text.toString().split("\\,");
-		for (int i = 1; i < array.length - 1; i++) {
-			if (StringUtils.isValid(array[i])
-					&& StringUtils.isValid(array[i + 1])) {
-				String sku1 = StringUtils.getSKU(array[i]);
-				String sku2 = StringUtils.getSKU(array[i + 1]);
-				if (!sku1.equals(sku2)) {
-					word.set(sku1 + "|" + sku2);
-					context.write(word,
-							new IntWritable(Integer.parseInt(weight)));
+
+		for (int m = 1; m < array.length - 1; m++) {
+			for (int i = m + 1; i < array.length; i++) {
+				if (StringUtils.isValid(array[m])
+						&& StringUtils.isValid(array[i])) {
+					String sku1 = StringUtils.getSKU(array[m]);
+					String sku2 = StringUtils.getSKU(array[i]);
+					if (!sku1.equals(sku2)) {
+						word.set(sku1 + "|" + sku2);
+						context.write(word,
+								new IntWritable(Integer.parseInt(weight)));
+					} else {
+						log.debug("## Same ##" + array[m] + " " + array[i]);
+					}
 				} else {
-					log.debug("## Same ##" + array[i] + " " + array[i + 1]);
+					log.debug("## Invalid ##" + array[m] + " " + array[i]);
 				}
-			} else {
-				log.debug("## Invalid ##" + array[i] + " " + array[i + 1]);
 			}
 		}
 	}

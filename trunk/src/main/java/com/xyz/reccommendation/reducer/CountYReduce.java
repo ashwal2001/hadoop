@@ -32,7 +32,7 @@ public class CountYReduce extends Reducer<Text, Text, Text, CPair> {
 		Set<Text> s = new TreeSet<Text>();
 		for (final Text val : vlist) {
 			// returns the same object with a different value each time
-			s.add(val);
+			s.add(new Text(val));
 		}
 		for (Text t : s) {
 			context.write(ikey, new CPair(t.toString(), s.size()));

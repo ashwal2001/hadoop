@@ -9,14 +9,13 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 
-import com.mongodb.hadoop.MongoInputFormat;
-import com.mongodb.hadoop.util.MongoConfigUtil;
-import com.xyz.reccommendation.jaccard.key.CPair;
-import com.xyz.reccommendation.mapper.XYIdentityMap;
+import com.xyz.reccommendation.mapper.XYIdentityMapCSV;
 import com.xyz.reccommendation.reducer.CountYReduce;
 
 public class MRStage1 {
@@ -34,7 +33,7 @@ public class MRStage1 {
 		} else {
 			envt = "dev";
 		}
-
+		log.debug("Envt: " + envt);
 		Properties prop = new Properties();
 
 		try {
@@ -47,6 +46,19 @@ public class MRStage1 {
 			System.exit(1);
 		}
 
+		// MongoConfigUtil.setInputURI(
+		// conf,
+		// "mongodb://" + prop.getProperty("mongodb.ip") + "/"
+		// + prop.getProperty("mongodb.dbname") + "."
+		// + prop.getProperty("mongodb.collectionname.input"));
+		//
+		// log.debug("MongoDB URL : mongodb://" + prop.getProperty("mongodb.ip")
+		// + "/"
+		// + prop.getProperty("mongodb.dbname") + "."
+		// + prop.getProperty("mongodb.collectionname.input"));
+		//
+		// MongoConfigUtil.setCreateInputSplits(conf, false);
+
 		log.debug("Conf: " + conf);
 		args = new GenericOptionsParser(conf, args).getRemainingArgs();
 
@@ -58,23 +70,17 @@ public class MRStage1 {
 		job.setMapOutputValueClass(Text.class);
 
 		job.setOutputKeyClass(Text.class);
-		job.setOutputValueClass(CPair.class);
+		job.setOutputValueClass(Text.class);
 
-		job.setMapperClass(XYIdentityMap.class);
+		job.setMapperClass(XYIdentityMapCSV.class);
 		job.setReducerClass(CountYReduce.class);
 
-		job.setInputFormatClass(MongoInputFormat.class);
+		// job.setInputFormatClass(MongoInputFormat.class);
+		job.setInputFormatClass(TextInputFormat.class);
 		job.setOutputFormatClass(TextOutputFormat.class);
 
 		// HDFS input and output directory
-		MongoConfigUtil.setInputURI(
-				conf,
-				"mongodb://" + prop.getProperty("mongodb.ip") + "/"
-						+ prop.getProperty("mongodb.dbname") + "."
-						+ prop.getProperty("mongodb.collectionname.input"));
-
-		MongoConfigUtil.setCreateInputSplits(conf, false);
-
+		FileInputFormat.setInputPaths(job, new Path("input"));
 		FileOutputFormat.setOutputPath(job, new Path("intermediate0"));
 
 		// Run map-reduce job

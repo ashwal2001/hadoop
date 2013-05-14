@@ -14,7 +14,7 @@ import com.mongodb.hadoop.io.BSONWritable;
  * of y values xi and xj are associated with)/(the sum of the counts)
  */
 public class NormalizationReduce extends
-		Reducer<Text, Text, Text, BSONWritable> {
+		Reducer<Text, Text, Text, Text> {
 	/**
 	 * @param ikey
 	 *            The xi xj pair for which we are calculating the similarity
@@ -32,6 +32,7 @@ public class NormalizationReduce extends
 			throws IOException, InterruptedException {
 		float count = 0;
 		float count1 = 0, count2 = 0;
+		float sumcounts = 0;
 
 		for (final Text val : vlist) {
 			// System.out.println(val.toString());
@@ -39,18 +40,24 @@ public class NormalizationReduce extends
 				String[] token = val.toString().split("\\|+");
 				count1 = Float.parseFloat(token[0]);
 				count2 = Float.parseFloat(token[1]);
+				sumcounts = count1 + count2;
 			}
 			count++;
 		}
 		String[] keyArray = ikey.toString().split("\\|");
 
-		float sum = (float) (count / Math.sqrt(count1 * count2));
+		float sumCosine = (float) (count / Math.sqrt(count1 * count2));
+		float sumJaccard = (float) (count / (sumcounts - count));
 
-		BasicBSONObject outputObj = new BasicBSONObject();
-		outputObj.put("count", sum);
-		outputObj.put("p1", keyArray[0]);
-		outputObj.put("p2", keyArray[1]);
+		StringBuilder outputObj = new StringBuilder();
+		outputObj.append(sumJaccard + ",");
+		outputObj.append(sumCosine);
+//		outputObj.append(sumCosine + ",");
+//		outputObj.append(keyArray[0] + ",");
+//		outputObj.append(keyArray[1]);
+		Text t = new Text();
+		t.set(outputObj.toString());
 
-		context.write(ikey, new BSONWritable(outputObj));
+		context.write(ikey, t);
 	}
 }

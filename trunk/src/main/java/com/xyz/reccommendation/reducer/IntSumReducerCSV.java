@@ -11,10 +11,9 @@ import org.bson.BasicBSONObject;
 
 import com.mongodb.hadoop.io.BSONWritable;
 
-public class IntSumReducer extends
-		Reducer<Text, IntWritable, Text, BSONWritable> {
+public class IntSumReducerCSV extends Reducer<Text, IntWritable, Text, Text> {
 
-	private static final Log log = LogFactory.getLog(IntSumReducer.class);
+	private static final Log log = LogFactory.getLog(IntSumReducerCSV.class);
 
 	public void reduce(Text key, Iterable<IntWritable> values, Context context)
 			throws IOException, InterruptedException {
@@ -29,11 +28,12 @@ public class IntSumReducer extends
 		log.debug("Count : " + sum + " p1 : " + keyArray[0] + " p2 : "
 				+ keyArray[1]);
 
-		BasicBSONObject output = new BasicBSONObject();
-		output.put("count", sum);
-		output.put("p1", keyArray[0]);
-		output.put("p2", keyArray[1]);
-
-		context.write(key, new BSONWritable(output));
+		StringBuilder outputObj = new StringBuilder();
+		outputObj.append(sum + ",");
+		outputObj.append(keyArray[0] + ",");
+		outputObj.append(keyArray[1]);
+		Text t = new Text();
+		t.set(outputObj.toString());
+		context.write(key, t);
 	}
 }

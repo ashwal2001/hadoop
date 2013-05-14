@@ -63,6 +63,9 @@ public class MongoDBTest {
 			while (cursor.hasNext()) {
 				System.out.println(cursor.next());
 			}
+			
+			cursor.close();
+			mongo.close();
 
 			/**** Done ****/
 			System.out.println("Done");

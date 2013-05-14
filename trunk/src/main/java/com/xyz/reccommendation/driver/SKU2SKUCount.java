@@ -73,6 +73,10 @@ public class SKU2SKUCount {
 				"mongodb://" + prop.getProperty("mongodb.ip") + "/"
 						+ prop.getProperty("mongodb.dbname")
 						+ ".out_stat_custom");
+		
+		log.debug("MongoDB URL : mongodb://" + prop.getProperty("mongodb.ip") + "/"
+				+ prop.getProperty("mongodb.dbname") + "."
+				+ ".out_stat_custom");
 
 		log.debug("Conf: " + conf);
 
@@ -103,5 +107,4 @@ public class SKU2SKUCount {
 		System.exit(job.waitForCompletion(true) ? 0 : 1);
 
 	}
-
 }
